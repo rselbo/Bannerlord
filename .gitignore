@@ -1,0 +1,5 @@
+SourceDLLs/
+.vs/
+.vscode/
+obj/
+bin/
