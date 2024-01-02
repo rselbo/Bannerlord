@@ -1,0 +1,25 @@
+﻿<Module>
+  <Name value="RS Boost Mod" />
+  <Id value="BoostMod" />
+  <Version value="v1.0.0" />
+  <ModuleCategory value="Singleplayer" />
+  <DependedModules/>
+  <DependedModuleMetadatas>
+    <DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.0.0.*" optional="true" />
+    <DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.0.0.*" optional="true" />
+    <DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.0.0.*" optional="true" />
+    <DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.0.0.*" optional="true" />
+    <DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.0.0.*" optional="true" />
+  </DependedModuleMetadatas>
+  <SubModules>
+    <SubModule>
+      <Name value="BoostMod" />
+      <DLLName value="BoostMod.dll" />
+      <SubModuleClassType value="BoostMod.BoostModModule" />
+      <Tags>
+        <Tag key="DedicatedServerType" value="none" />
+        <Tag key="IsNoRenderModeElement" value="false" />
+      </Tags>
+    </SubModule>
+  </SubModules>
+</Module>
