@@ -2,11 +2,29 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace LevelingTweaks
 {
+    internal class RoarsTroopSacrificeModel : DefaultTroopSacrificeModel
+    {
+        public override int GetLostTroopCountForBreakingInBesiegedSettlement(
+            MobileParty party,
+            SiegeEvent siegeEvent)
+        {
+            return base.GetLostTroopCountForBreakingInBesiegedSettlement(party, siegeEvent) / 10;
+        }
+
+        public override int GetLostTroopCountForBreakingOutOfBesiegedSettlement(
+            MobileParty party,
+            SiegeEvent siegeEvent)
+        {
+            return base.GetLostTroopCountForBreakingOutOfBesiegedSettlement(party, siegeEvent) / 10;
+        }
+    }
     public class LevelingTweaksMod : MBSubModuleBase
     {
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
@@ -14,6 +32,7 @@ namespace LevelingTweaks
             if (!(game.GameType is Campaign))
                 return;
             this.ReplaceModel<DefaultCharacterDevelopmentModel, RoarsCharacterDevelopmentModel>(gameStarterObject);
+            this.ReplaceModel<DefaultTroopSacrificeModel, RoarsTroopSacrificeModel>(gameStarterObject);
         }
 
         protected void ReplaceModel<TBaseType, TChildType>(IGameStarter gameStarterObject)
