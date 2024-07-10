@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM" Version="5.0.0" IncludeAssets="compile" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>..\SourceDLLs\TaleWorlds.CampaignSystem.dll</HintPath>
