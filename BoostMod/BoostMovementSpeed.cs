@@ -20,7 +20,7 @@ namespace BoostMod
             ExplainedNumber num = base.CalculateBaseSpeed(mobileParty, includeDescriptions, additionalTroopOnFootCount, additionalTroopOnHorseCount);
             if (mobileParty.IsMainParty)
             {
-                num.Add(4.0f, description: new TaleWorlds.Localization.TextObject("Boost"));
+                num.Add(BoostModModule.Settings.MovementBoost, description: new TaleWorlds.Localization.TextObject("Boost"));
             }
             return num;
         }

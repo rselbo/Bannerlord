@@ -9,7 +9,7 @@ namespace BoostMod
         public override int GetBoostAmount(Town town)
         {
             int num = base.GetBoostAmount(town);
-            return num * 100;
+            return (int)(num * BoostModModule.Settings.SettlementGoldMultiplier);
         }
     }
 }

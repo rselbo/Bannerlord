@@ -5,14 +5,11 @@ using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Party;
+using MCM.Abstractions.Base.Global;
+using System.Runtime;
 
 namespace FoodAutoPurchaser
 {
-    class AutoPurchaserSettings
-    {
-        public int FoodBuyLimit = 0;
-    }
-
     public class AutoPurchaser : MBSubModuleBase
     {
         public AutoPurchaser()
@@ -21,7 +18,12 @@ namespace FoodAutoPurchaser
         }
 
         private static AutoPurchaser autoPurchaser = null;
-        private int BuyLimit { get; set; } = 20;
+        private FoodAutoPurchaseSettings Settings = null;
+
+        protected override void OnBeforeInitialModuleScreenSetAsRoot()
+        {
+            Settings = GlobalSettings<FoodAutoPurchaseSettings>.Instance;
+        }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
@@ -35,38 +37,86 @@ namespace FoodAutoPurchaser
         {
             if (hero == null || !hero.IsHumanPlayerCharacter)
                 return;
-            for (int index = 0; index < settlement.ItemRoster.Count; ++index)
-            {
-                if (hero.Gold < 10000)
-                    return;
 
-                ItemRosterElement elementCopyAtIndex = settlement.ItemRoster.GetElementCopyAtIndex(index);
-                EquipmentElement equipmentElement = ((ItemRosterElement)elementCopyAtIndex).EquipmentElement;
-                ItemObject itemObject1 = ((EquipmentElement)equipmentElement).Item;
-                if (itemObject1.IsFood)
+            if (Settings != null)
+            {
+                if (Settings.EnableBuying && hero.Gold >= Settings.MinimumCash)
                 {
-                    int val1 = this.BuyLimit;
-                    int indexOfItem = mobileParty.ItemRoster.FindIndexOfItem(itemObject1);
-                    if (indexOfItem >= 0)
-                    {
-                        int buyLimit = this.BuyLimit;
-                        ItemRosterElement itemRosterElement = mobileParty.ItemRoster[indexOfItem];
-                        int amount = ((ItemRosterElement)itemRosterElement).Amount;
-                        val1 = buyLimit - amount;
-                    }
-                    int num = Math.Min(val1, ((ItemRosterElement)elementCopyAtIndex).Amount - 1);
-                    if (num > 0)
-                    {
-                        SettlementComponent component = settlement.SettlementComponent;
-                        MobileParty mobileParty1 = mobileParty;
-                        ItemObject itemObject2 = itemObject1;
-                        MobileParty mobileParty2 = mobileParty1;
-                        if (component.GetItemPrice(itemObject2, mobileParty2, false)*num <= mobileParty.LeaderHero.Gold)
-                            SellItemsAction.Apply(settlement.Party, mobileParty.Party, elementCopyAtIndex, num, (Settlement)null);
-                    }
+                    BuyFood(mobileParty, settlement, hero);
+                }
+                if (Settings.EnableSelling)
+                {
+                    SellItems(mobileParty, settlement, hero);
+                }
+
+            }
+        }
+
+        private void BuyFood(MobileParty mobileParty, Settlement settlement, Hero hero)
+        {
+            foreach(ItemRosterElement item in settlement.ItemRoster)
+            {
+                ItemObject itemObject = ((EquipmentElement)item.EquipmentElement).Item;
+                if(itemObject.IsFood)
+                {
+                    BuyFoodItem(mobileParty, settlement, hero, item);
                 }
             }
         }
 
+        private void BuyFoodItem(MobileParty mobileParty, Settlement settlement, Hero hero, ItemRosterElement foodRosterItem)
+        {
+            ItemObject foodItem = ((EquipmentElement)foodRosterItem.EquipmentElement).Item;
+            int partyAmount = GetPartyAmount(mobileParty, foodItem);
+            int wantToBuy = Settings.MinimumFood - partyAmount;
+
+            if (wantToBuy > 0)
+            {
+                SettlementComponent component = settlement.SettlementComponent;
+
+                int pricePer = component.GetItemPrice(foodItem, mobileParty, false);
+                //limit by cash
+                int canBuy = mobileParty.LeaderHero.Gold / pricePer;
+                wantToBuy = Math.Min(wantToBuy, canBuy);
+                if (wantToBuy == 0)
+                    return;
+
+                SellItemsAction.Apply(settlement.Party, mobileParty.Party, foodRosterItem, wantToBuy, settlement);
+            }
+        }
+
+        private int GetPartyAmount(MobileParty mobileParty, ItemObject foodItem)
+        {
+            int indexOfItem = mobileParty.ItemRoster.FindIndexOfItem(foodItem);
+            if (indexOfItem >= 0)
+            {
+                ItemRosterElement itemRosterElement = mobileParty.ItemRoster[indexOfItem];
+                return ((ItemRosterElement)itemRosterElement).Amount;
+            }
+            return 0;
+        }
+
+        private void SellItems(MobileParty mobileParty, Settlement settlement, Hero hero)
+        {
+            foreach(ItemRosterElement item in mobileParty.ItemRoster)
+            {
+                ItemObject itemObject = ((EquipmentElement)item.EquipmentElement).Item;
+                if (itemObject.IsFood && item.Amount > Settings.MaximumFood)
+                {
+                    SellItemsAction.Apply(mobileParty.Party, settlement.Party, item, item.Amount - Settings.MaximumFood, settlement);
+                }
+
+                if (itemObject.IsAnimal && Settings.EnableSellingAnimals)
+                {
+                    SellItemsAction.Apply(mobileParty.Party, settlement.Party, item, item.Amount, settlement);
+                }
+
+                if (itemObject.IsTradeGood && !itemObject.IsFood && Settings.EnableSellingGoods)
+                {
+                    SellItemsAction.Apply(mobileParty.Party, settlement.Party, item, item.Amount, settlement);
+                }
+
+            }
+        }
     }
 }

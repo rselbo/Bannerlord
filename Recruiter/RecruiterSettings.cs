@@ -10,7 +10,7 @@ namespace Recruiter
         public Recruiter recruiter = null;
         public override string Id => "Recruiter";
 
-        public override string DisplayName => "Recruiter";
+        public override string DisplayName => "RS Recruiter";
 
         public override string FolderName => "Recruiter";
 
@@ -42,6 +42,10 @@ namespace Recruiter
         [SettingPropertyFloatingInteger("Troop cost multiplier for elite troops", 0.1f, 20, "0", RequireRestart = false, HintText = "Multiplier for hiring elite troops ", Order = 0)]
         [SettingPropertyGroup("General", GroupOrder = 0)]
         public float CostMultiplierElite { get; set; } = 1.0f;
+
+        [SettingPropertyFloatingInteger("Troop tier cost extra multiplier", 0, 10, "0", RequireRestart = false, HintText = "Extra multiplier for the troop costs making higher tiers more expensive", Order = 0)]
+        [SettingPropertyGroup("General", GroupOrder = 0)]
+        public float CostTierMultiplier { get; set; } = 0;
 
         public override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

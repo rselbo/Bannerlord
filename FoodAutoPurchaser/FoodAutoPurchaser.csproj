@@ -12,6 +12,10 @@
   </Target>
 
   <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM" Version="5.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>..\SourceDLLs\TaleWorlds.CampaignSystem.dll</HintPath>
     </Reference>

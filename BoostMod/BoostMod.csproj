@@ -1,35 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net472</TargetFramework>
-		<ImplicitUsings>false</ImplicitUsings>
-		<PlatformTarget>x64</PlatformTarget>
-		<Platforms>AnyCPU;x64</Platforms>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ImplicitUsings>false</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM" Version="5.0.0" IncludeAssets="compile" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="TaleWorlds.CampaignSystem">
-			<HintPath>..\SourceDLLs\TaleWorlds.CampaignSystem.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.Core">
-			<HintPath>..\SourceDLLs\TaleWorlds.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.Library">
-			<HintPath>..\SourceDLLs\TaleWorlds.Library.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.Localization">
-		  <HintPath>..\SourceDLLs\TaleWorlds.Localization.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.MountAndBlade">
-			<HintPath>..\SourceDLLs\TaleWorlds.MountAndBlade.dll</HintPath>
-		</Reference>
-		<Reference Include="TaleWorlds.ObjectSystem">
-			<HintPath>..\SourceDLLs\TaleWorlds.ObjectSystem.dll</HintPath>
-		</Reference>
-	</ItemGroup>
+  <ItemGroup>
+    <Reference Include="TaleWorlds.CampaignSystem">
+      <HintPath>..\SourceDLLs\TaleWorlds.CampaignSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Core">
+      <HintPath>..\SourceDLLs\TaleWorlds.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Library">
+      <HintPath>..\SourceDLLs\TaleWorlds.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Localization">
+      <HintPath>..\SourceDLLs\TaleWorlds.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade">
+      <HintPath>..\SourceDLLs\TaleWorlds.MountAndBlade.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.ObjectSystem">
+      <HintPath>..\SourceDLLs\TaleWorlds.ObjectSystem.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="python ../deploy.py RsBoostMod $(TargetDir)$(TargetName) &quot;D:/SteamLibrary/steamapps/common/Mount &amp; Blade II Bannerlord/Modules/&quot;" />
-	</Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="python ../deploy.py RsBoostMod $(TargetDir)$(TargetName) &quot;D:/SteamLibrary/steamapps/common/Mount &amp; Blade II Bannerlord/Modules/&quot;" />
+  </Target>
 
 </Project>

@@ -74,15 +74,15 @@ namespace Recruiter
                     if(isElite)
                     {
                         int clanEliteTier = Hero.MainHero.Clan.Tier - Settings.ClanRankForElite;
-                        return clanEliteTier >= 0 && Settings.MaxRankElite <= troop.Tier &&
-                               ((Settings.TierRecruitablePerClanRankElite == 0 && troop.Tier == 2) || troop.Tier <= ((clanEliteTier * Settings.TierRecruitablePerClanRankElite) + 1)) &&
+                        return clanEliteTier >= 0 && Settings.MaxRankElite >= troop.Tier &&
+                               ((Settings.TierRecruitablePerClanRankElite == 0 && troop.Tier == 2) || troop.Tier <= (((clanEliteTier + 1)  * Settings.TierRecruitablePerClanRankElite) + 1)) &&
                                Hero.MainHero.Gold >= getRecruitmentCost(troop, 1, isElite);
                     }
                     else
                     {
-                        int clanEliteTier = Hero.MainHero.Clan.Tier - Settings.ClanRankForRegular;
-                        return clanEliteTier >= 0 && Settings.MaxRankRegular <= troop.Tier && 
-                               troop.Tier <= ((Hero.MainHero.Clan.Tier * Settings.TierRecruitablePerClanRank) + 1) &&
+                        int clanTier = Hero.MainHero.Clan.Tier - Settings.ClanRankForRegular;
+                        return clanTier >= 0 && Settings.MaxRankRegular >= troop.Tier &&
+                               ((Settings.TierRecruitablePerClanRank == 0 && troop.Tier == 1) || troop.Tier <= ((clanTier + 1) * Settings.TierRecruitablePerClanRank)) &&
                                Hero.MainHero.Gold >= getRecruitmentCost(troop, 1, isElite);
                     }
                 },
@@ -119,7 +119,7 @@ namespace Recruiter
         {
             DefaultPartyWageModel wageModel = new DefaultPartyWageModel();
             float multiplier = isElite ? Settings.CostMultiplierElite : Settings.CostMultiplierRegular;
-            return (int)(wageModel.GetTroopRecruitmentCost(troop, Hero.MainHero) * multiplier * amount);
+            return (int)(wageModel.GetTroopRecruitmentCost(troop, Hero.MainHero) * (multiplier + (Settings.CostTierMultiplier * troop.Tier)) * amount);
         }
 
         public override void OnAfterGameInitializationFinished(Game game, object starterObject)

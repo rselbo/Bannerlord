@@ -7,6 +7,7 @@ namespace SettlementGoldMod
 {
     public class GoldSettlementEconomyModel : DefaultSettlementEconomyModel
     {
-        public override int GetTownGoldChange(Town town) => MathF.Round(0.25f * ((float)(10000.0 + (double)town.Prosperity * 120.0) - (float)town.Gold));
+        private readonly int Factor = 100;
+        public override int GetTownGoldChange(Town town) => MathF.Round(0.25f * (10000f + town.Prosperity * 12f * Factor - (float)town.Gold));
     }
 }
