@@ -3,10 +3,11 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
+using Shokuho.CustomCampaign.Models.CampaignModels;
 
 namespace RefiningMod
 {
-    internal class RoarsSmithingModelModel : DefaultSmithingModel
+    internal class RoarsSmithingModelModel : ShokuhoSmithingModel
     {
         public override IEnumerable<TaleWorlds.Core.Crafting.RefiningFormula> GetRefiningFormulas(Hero weaponsmith)
         {

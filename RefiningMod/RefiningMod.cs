@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using Shokuho.CustomCampaign.Models.CampaignModels;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -13,7 +14,7 @@ namespace RefiningMod
         {
             if (!(game.GameType is Campaign))
                 return;
-            this.ReplaceModel<DefaultSmithingModel, RoarsSmithingModelModel>(gameStarterObject);
+            this.ReplaceModel<ShokuhoSmithingModel, RoarsSmithingModelModel>(gameStarterObject);
         }
 
         protected void ReplaceModel<TBaseType, TChildType>(IGameStarter gameStarterObject)
@@ -32,9 +33,10 @@ namespace RefiningMod
                         models[index] = (GameModel)(object)Activator.CreateInstance<TChildType>();
                 }
             }
-            if (flag)
-                return;
-            gameStarterObject.AddModel((GameModel)(object)Activator.CreateInstance<TChildType>());
+            if (!flag)
+            {
+                gameStarterObject.AddModel((GameModel)(object)Activator.CreateInstance<TChildType>());
+            }
         }
     }
 }
