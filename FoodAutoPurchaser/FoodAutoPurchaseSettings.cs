@@ -47,5 +47,9 @@ namespace FoodAutoPurchaser
         [SettingPropertyGroup("General", GroupOrder = 0)]
         public bool EnableSellingGoods { get; set; } = false;
 
+        [SettingPropertyBool("Exclude selling tools", RequireRestart = false)]
+        [SettingPropertyGroup("General", GroupOrder = 0)]
+        public bool ExcludeSellingTools { get; set; } = false;
+
     }
 }

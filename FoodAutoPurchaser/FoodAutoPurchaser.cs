@@ -70,6 +70,13 @@ namespace FoodAutoPurchaser
             int partyAmount = GetPartyAmount(mobileParty, foodItem);
             int wantToBuy = Settings.MinimumFood - partyAmount;
 
+            // Dot buy food that will exceed encumberance
+            float remainingCapacity = mobileParty.InventoryCapacity - mobileParty.TotalWeightCarried;
+            if(remainingCapacity < foodItem.Weight * wantToBuy) 
+            {
+                wantToBuy = (int)(remainingCapacity / foodItem.Weight);
+            }
+
             if (wantToBuy > 0)
             {
                 SettlementComponent component = settlement.SettlementComponent;
